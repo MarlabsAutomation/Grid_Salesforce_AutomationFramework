@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- WARNING: Eclipse auto-generated file.
+              Any modifications will be overwritten.
+              To include a user specific buildfile here, simply create one in the same
+              directory with the processing instruction <?eclipse.ant.import?>
+              as the first entry and export the buildfile again. --><project basedir="." default="build" name="Grid_Salesforce_AutomationFramework">
+    <property environment="env"/>
+    <property name="ECLIPSE_HOME" value="../../eclipse/"/>
+    <property name="debuglevel" value="source,lines,vars"/>
+    <property name="target" value="1.5"/>
+    <property name="source" value="1.5"/>
+    <path id="Grid_Salesforce_AutomationFramework.classpath">
+        <pathelement location="bin"/>
+        <pathelement location="../../Project/JarFolder/commons-collections4-4.0.jar"/>
+        <pathelement location="../../Project/JarFolder/extentreports-java-2.031.jar"/>
+        <pathelement location="../../Project/JarFolder/java-client-3.0.0.jar"/>
+        <pathelement location="../../Project/JarFolder/mysql-connector-java-5.1.36-bin.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-examples-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-excelant-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-ooxml-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-ooxml-schemas-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/poi-scratchpad-3.12-20150511.jar"/>
+        <pathelement location="../../Project/JarFolder/xmlbeans-2.6.0.jar"/>
+        <pathelement location="../../Project/JarFolder/selenium-safari-driver-2.47.1.jar"/>
+        <pathelement location="../../Users/user/Downloads/twitter4j-core-3.0.5.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/testlink-api-client-2.0.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/commons-logging-1.1.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/junit.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/ws-commons-util-1.0.2.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/xmlrpc-client-3.1.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/xmlrpc-client-3.1-sources.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/xmlrpc-common-3.1.jar"/>
+        <pathelement location="../../xampp/htdocs/testlink/testlink-api-client-20091130/lib/xmlrpc-common-3.1-sources.jar"/>
+        <pathelement location="../../Android/selenium-java-2.48.2/selenium-2.48.2/selenium-java-2.48.2.jar"/>
+        <pathelement location="../../Android/selenium-java-2.48.2/selenium-2.48.2/selenium-java-2.48.2-srcs.jar"/>
+        <pathelement location="../../Users/user/Downloads/selenium-server-standalone-2.48.2.jar"/>
+        <pathelement location="../../Project/JarFolder/commons-httpclient-3.0.1.jar"/>
+    </path>
+    <target name="init">
+        <mkdir dir="bin"/>
+        <copy includeemptydirs="false" todir="bin">
+            <fileset dir="src">
+                <exclude name="**/*.java"/>
+            </fileset>
+        </copy>
+    </target>
+    <target name="clean">
+        <delete dir="bin"/>
+    </target>
+    <target depends="clean" name="cleanall"/>
+    <target depends="build-subprojects,build-project" name="build"/>
+    <target name="build-subprojects"/>
+    <target depends="init" name="build-project">
+        <echo message="${ant.project.name}: ${ant.file}"/>
+        <javac debug="true" debuglevel="${debuglevel}" destdir="bin" includeantruntime="false" source="${source}" target="${target}">
+            <src path="src"/>
+            <classpath refid="Grid_Salesforce_AutomationFramework.classpath"/>
+        </javac>
+    </target>
+    <target description="Build all projects which reference this project. Useful to propagate changes." name="build-refprojects"/>
+    <target description="copy Eclipse compiler jars to ant lib directory" name="init-eclipse-compiler">
+        <copy todir="${ant.library.dir}">
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </copy>
+        <unzip dest="${ant.library.dir}">
+            <patternset includes="jdtCompilerAdapter.jar"/>
+            <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+        </unzip>
+    </target>
+    <target description="compile project with Eclipse compiler" name="build-eclipse-compiler">
+        <property name="build.compiler" value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+        <antcall target="build"/>
+    </target>
+    <target name="Index (5)">
+        <java classname="Marlabs.Main.Driver" failonerror="true" fork="yes">
+            <classpath refid="Grid_Salesforce_AutomationFramework.classpath"/>
+        </java>
+    </target>
+    <target name="Bugzilla">
+        <java classname="Marlabs.Bugzilla.Bugzilla" failonerror="true" fork="yes">
+            <classpath refid="Grid_Salesforce_AutomationFramework.classpath"/>
+        </java>
+    </target>
+	<target name="run" description="Marlabs automation tests" depends="init, compile">
+		<echo message="                                  -- run-tests --" />
+		<java fork="yes" classpathref="run.cp" classname="Marlabs.Main.Driver"/>
+		<echo>Result of execution are available at</echo> 
+		<echo>${report.dir} in HTML format report</echo>
+	</target>
+</project>

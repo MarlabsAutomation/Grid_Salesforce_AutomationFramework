@@ -1,0 +1,97 @@
+<project name="Automation_Framework" default="run-test" basedir=".">
+
+	<echo message="Path = ${basedir}" />
+	<property name="javadoc.dir" value="${basedir}/doc" />
+	<property name="lib.dir" value="C:\Selenium_jars" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="class.dir" value="${basedir}/bin" />
+	<property name="report.dir" value="C:\WorkSpace_new11_17\Grid_Salesforce_AutomationFramework\src\Marlabs\Reports\Reports" />
+
+	<target name="run-test" depends="clean,prepare,compile,run" />
+
+	<!-- ==================================================================== -->
+	<!-- 				Clean 		                     	     			  -->
+	<!-- ==================================================================== -->
+	<target name="clean" description="clean up previous results">
+		<echo message="  -- clean dir --" />
+		<delete dir="${class.dir}" />
+		<delete dir="${javadoc.dir}" />
+	</target>
+
+	<!-- ==================================================================== -->
+	<!-- 				Prepare                                   			  -->
+	<!-- ==================================================================== -->
+	<target name="prepare">
+		<echo message="  -- mkdir for prepare --" />
+		<mkdir dir="${class.dir}" />
+		<mkdir dir="${javadoc.dir}" />
+	</target>
+
+	<!-- ==================================================================== -->
+	<!-- 				Javadoc				                                  -->
+	<!-- ==================================================================== -->
+	<target name="javadoc" description="generate javadoc">
+		<echo message="  -- generate the Javadoc --" />
+		<javadoc destdir="${javadoc.dir}" locale="en_US" encoding="UTF-8" docencoding="UTF-8" useexternalfile="true">
+			<fileset dir="${src.dir}">
+				<include name="**/*.java" />
+			</fileset>
+		</javadoc>
+	</target>
+
+	<!-- ==================================================================== -->
+	<!--				Init 					  							  -->
+	<!-- ==================================================================== -->
+	<target name="init" description="start selenium server">
+		<echo message="  -- start selenium server for init --" />
+		<java jar="${lib.dir}/selenium-server.jar" fork="true" spawn="true">
+			<arg value="-log" />
+			<arg value="selenium.log" />
+		</java>
+	</target>
+
+	<!-- ==================================================================== -->
+	<!-- 				Compile                                   			  -->
+	<!-- ==================================================================== -->
+	<path id="compile.cp">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+		</fileset>
+	</path>
+
+	<target name="compile" description="compile the test code" depends="prepare">
+		<echo message="   -- compile-tests --" />
+		<javac debug="true" fork="true" source="1.6" classpathref="compile.cp" srcdir="${src.dir}" destdir="${class.dir}" />
+	</target>
+	<target name="Bugzilla">
+        <java classname="Marlabs.Bugzilla.Bugzilla" failonerror="true" fork="yes">
+            <classpath refid="Grid_Salesforce_AutomationFramework.classpath"/>
+        </java>
+    </target>
+	<!-- ==================================================================== -->
+	<!-- 				Run                                       			  -->
+	<!-- ==================================================================== -->
+	<path id="run.cp">
+		<path refid="compile.cp" />
+		<pathelement location="${class.dir}" />
+	</path>
+	<target name="run" description="Marlabs automation tests" depends="init, compile">
+		<echo message="                                  -- run-tests --" />
+		<java fork="yes" classpathref="run.cp" classname="Marlabs.Main.Driver"/>
+		<echo>Result of execution are available at</echo> 
+		<echo>${report.dir} in HTML format report</echo>
+	</target>
+
+	<target name="report" depends="run">
+		  <delete dir="${basedir}/testng-xslt">
+		        </delete>
+		        <mkdir dir="${basedir}/testng-xslt">
+		        </mkdir>
+		<xslt in="./test-output/testng-results.xml" style="./testng-results.xsl" out="./testng-xslt/index.html">
+		  <param expression="${basedir}/testng-xslt/" name="testNgXslt.outputDir" /> 
+		  <classpath path="D:/jars/jar/saxon-8.7.jar" /> 
+		  </xslt>
+		  </target>
+
+
+</project>
